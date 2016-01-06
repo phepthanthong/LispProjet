@@ -16,6 +16,19 @@ Le joueur doit passer tous les niveaux afin de gagner le jeu. Dans chaque niveau
 
 **Ameliorations possibles**
 
+## Chargement du jeu sur Slime
+1. Tapez sur Slime la commande: (compile-file "ltk")  
+2. Tapez ensuite: (load :ltk)  
+3. Il faut aller dans le paquet LTK, donc tapez: (in-package :ltk) 
+4. 
+
+
+## Guide d'utilisateur
+1. Appuyez sur le bouton "Start" pour commencer le jeu  
+2. Utilisez les boutons Gauche et Droite pour controler la voiture  
+3. Apres avoir gagne un niveau, appuyez de nouveau sur le bouton "Start" pour commencer le niveau suivant  
+4. Vous gagnerez le jeu une fois passe tous les niveaux
+
 ## Outils
  * Implémentation de Lisp: sbcl et Slime (Emacs)
  * Gestionnaire des bibliothèques en Lisp: Quicklisp
