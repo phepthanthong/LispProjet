@@ -12,21 +12,17 @@ Choix: Jeu de course d'automobile simplifié
 Il faut contrôler la voiture principale, avec les touches Gauche et Droite du clavier, pour éviter la collision avec les obstacles qui sont les autres voitures.  
 Le joueur doit passer tous les niveaux afin de gagner le jeu. Dans chaque niveau, la vitesse des obstacles augmente. Si une fois, la voiture principale est en collision avec un obstacle, le joueur est perdu le jeu et doit le recommencer. 
 
-**Image de demo**
-
-**Ameliorations possibles**
-
-## Chargement du jeu sur Slime
-1. Tapez sur Slime la commande: (compile-file "ltk")  
-2. Tapez ensuite: (load :ltk)  
-3. Il faut aller dans le paquet LTK, donc tapez: (in-package :ltk) 
-4. 
+## Chargement du jeu sur Slime avec Quicklisp
+1. Tapez sur Slime la commande: (ql:quickload "ltk")
+2. Il faut aller dans le paquet LTK, donc tapez: (in-package :ltk) 
+3. Compilez le fichier principal 
+4. Tapez (main) sur Slime sur demarrer la fonction principale
 
 
 ## Guide d'utilisateur
 1. Appuyez sur le bouton "Start" pour commencer le jeu  
 2. Utilisez les boutons Gauche et Droite pour controler la voiture  
-3. Apres avoir gagne un niveau, appuyez de nouveau sur le bouton "Start" pour commencer le niveau suivant  
+3. Apres avoir gagne un niveau, appuyez sur le bouton "Change Level" pour charger le niveau suivant et appuyez de nouveau sur le bouton "Start" pour commencer  
 4. Vous gagnerez le jeu une fois passe tous les niveaux
 
 ## Outils

@@ -17,16 +17,16 @@
 	(rue-02 '())
 	(rue-03 '())
 	(rue-04 '()))
-    (push (create-rectangle canvas 110 (+ 10 (* -1 100)) 120 (+ 90 (* -1 100))) rue-01)
-    (push (create-rectangle canvas 300 (+ 10 (* -1 100)) 310 (+ 90 (* -1 100))) rue-02)
-    (push (create-rectangle canvas 490 (+ 10 (* -1 100)) 500 (+ 90 (* -1 100))) rue-03)
-    (push (create-rectangle canvas 680 (+ 10 (* -1 100)) 690 (+ 90 (* -1 100))) rue-04)         
-    (dotimes (x 10)
+    (loop for x from -1 to 10 do
       (push (create-rectangle canvas 110 (+ 10 (* x 100)) 120 (+ 90 (* x 100))) rue-01)
       (push (create-rectangle canvas 300 (+ 10 (* x 100)) 310 (+ 90 (* x 100))) rue-02)
       (push (create-rectangle canvas 490 (+ 10 (* x 100)) 500 (+ 90 (* x 100))) rue-03)
       (push (create-rectangle canvas 680 (+ 10 (* x 100)) 690 (+ 90 (* x 100))) rue-04)      
       )
+    ;(mapcar #'(lambda (x) (itemconfigure canvas x :fill :white)) rue-01)
+    ;(mapcar #'(lambda (x) (itemconfigure canvas x :fill :white)) rue-02)
+    ;(mapcar #'(lambda (x) (itemconfigure canvas x :fill :white)) rue-03)
+    ;(mapcar #'(lambda (x) (itemconfigure canvas x :fill :white)) rue-04)
     (push rue-04 l)
     (push rue-03 l)
     (push rue-02 l)
@@ -47,29 +47,48 @@
 ;;; @param canvas - le canvas qui contient objet
 ;;; @param (x,y) - coordonnees d'initiales
 (defun create-my-voiture (canvas x y)
-  "Create the main vehicle"
-  (list (list (create-rectangle canvas (- x 30) (- y 40) (+ x 30) (+ y 60))
-	      (create-rectangle canvas (- x 40) (- y 80) (+ x 40) (+ y 80))
-	      (create-line canvas (list (- x 30) (- y 40) (- x 40) (- y 80)))
-	      (create-line canvas (list (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
-	      (create-line canvas (list (- x 30) (+ y 60) (- x 40) (+ y 80)))
-	      (create-line canvas (list (+ x 30) (- y 40) (+ x 40) (- y 80))))
-	x y 0 40 80))
+  "Create the main car"
+  (let ((fact0 (create-rectangle canvas (- x 30) (- y 40) (+ x 30) (+ y 60)))
+	(fact1 (create-rectangle canvas (- x 40) (- y 80) (+ x 40) (+ y 80)))
+	(fact2 (create-polygon canvas (list (- x 40) (- y 80) (+ x 40) (- y 80) (+ x 30) (- y 40) (- x 30) (- y 40))))
+	(fact3 (create-polygon canvas (list (- x 40) (- y 80) (- x 40) (+ y 80) (- x 30) (+ y 60) (- x 30) (- y 40))))
+	(fact4 (create-polygon canvas (list (- x 40) (+ y 80) (- x 30) (+ y 60) (+ x 30) (+ y 60) (+ x 40) (+ y 80))))
+	(fact5 (create-polygon canvas (list (+ x 30) (+ y 60) (+ x 40) (+ y 80) (+ x 40) (- y 80) (+ x 30) (- y 40))))
+	(fact6 (create-line canvas (list (- x 30) (- y 40) (- x 40) (- y 80))))
+	(fact7 (create-line canvas (list (+ x 30) (+ y 60) (+ x 40) (+ y 80))))
+	(fact8 (create-line canvas (list (- x 30) (+ y 60) (- x 40) (+ y 80))))
+	(fact9 (create-line canvas (list (+ x 30) (- y 40) (+ x 40) (- y 80))))
+	(text1 (create-text canvas (- x 10) (- y 10) ""))
+	(text2 (create-text canvas (- x 12) (+ y 5) ""))
+	)
+    (itemconfigure canvas fact0 :fill :red)
+    (itemconfigure canvas fact2 :fill :#66FF99)
+    (itemconfigure canvas fact3 :fill :black)
+    (itemconfigure canvas fact4 :fill :#66FF99)
+    (itemconfigure canvas fact5 :fill :black)
+    (list (list fact0 fact1 fact2 fact3 fact4 fact5 fact6 fact7 fact8 fact9 text1 text2) x y 0 40 80)
+    ))
 
 ;;; Modifier la position de voiture de joueur
 ;;; @param my-voiture - voiture de joueur
 ;;; @param canvas - le canvas qui contient objet
 ;;; @param (x,y) - coordonnees modifiees
 (defun set-pos-my-voiture (my-voiture canvas x y)
-  "Modify the position of the main vehicle"
+  "Modify the main car's position"
   (setf (nth 1 my-voiture) x)
   (setf (nth 2 my-voiture) y)
   (set-coords canvas (nth 0 (car my-voiture)) (list (- x 30) (- y 40) (+ x 30) (+ y 60)))
   (set-coords canvas (nth 1 (car my-voiture)) (list (- x 40) (- y 80) (+ x 40) (+ y 80)))
-  (set-coords canvas (nth 2 (car my-voiture)) (list (- x 30) (- y 40) (- x 40) (- y 80)))
-  (set-coords canvas (nth 3 (car my-voiture)) (list (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
-  (set-coords canvas (nth 4 (car my-voiture)) (list (- x 30) (+ y 60) (- x 40) (+ y 80)))
-  (set-coords canvas (nth 5 (car my-voiture)) (list (+ x 30) (- y 40) (+ x 40) (- y 80))))
+  (set-coords canvas (nth 2 (car my-voiture)) (list (- x 40) (- y 80) (+ x 40) (- y 80) (+ x 30) (- y 40) (- x 30) (- y 40)))
+  (set-coords canvas (nth 3 (car my-voiture)) (list (- x 40) (- y 80) (- x 40) (+ y 80) (- x 30) (+ y 60) (- x 30) (- y 40)))
+  (set-coords canvas (nth 4 (car my-voiture)) (list (- x 40) (+ y 80) (- x 30) (+ y 60) (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
+  (set-coords canvas (nth 5 (car my-voiture)) (list (+ x 30) (+ y 60) (+ x 40) (+ y 80) (+ x 40) (- y 80) (+ x 30) (- y 40)))
+  (set-coords canvas (nth 6 (car my-voiture)) (list (- x 30) (- y 40) (- x 40) (- y 80)))
+  (set-coords canvas (nth 7 (car my-voiture)) (list (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
+  (set-coords canvas (nth 8 (car my-voiture)) (list (- x 30) (+ y 60) (- x 40) (+ y 80)))
+  (set-coords canvas (nth 9 (car my-voiture)) (list (+ x 30) (- y 40) (+ x 40) (- y 80)))
+  (set-coords canvas (nth 10 (car my-voiture)) (list (- x 10) (- y 10)))
+  (set-coords canvas (nth 11 (car my-voiture)) (list (- x 12) (+ y 5))))
 
 ;;; Creer voiture ennemi de type 01 
 ;;; Longueur voiture : 160
@@ -78,14 +97,27 @@
 ;;; @param (x,y) - coordonnees d'initiales
 (defun create-voiture-ennemi-type-01 (canvas x y)
   "Create a list of obstacles"
-  (list (list (create-rectangle canvas (- x 30) (- y 40) (+ x 30) (+ y 60))
-	      (create-rectangle canvas (- x 40) (- y 80) (+ x 40) (+ y 80))
-	      (create-line canvas (list (- x 30) (- y 40) (- x 40) (- y 80)))
-	      (create-line canvas (list (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
-	      (create-line canvas (list (- x 30) (+ y 60) (- x 40) (+ y 80)))
-	      (create-line canvas (list (+ x 30) (- y 40) (+ x 40) (- y 80))))
-	x y 1 40 80))
-
+  (let ((fact0 (create-rectangle canvas (- x 30) (- y 40) (+ x 30) (+ y 60)))
+	(fact1 (create-rectangle canvas (- x 40) (- y 80) (+ x 40) (+ y 80)))
+	(fact2 (create-polygon canvas (list (- x 40) (- y 80) (+ x 40) (- y 80) (+ x 30) (- y 40) (- x 30) (- y 40))))
+	(fact3 (create-polygon canvas (list (- x 40) (- y 80) (- x 40) (+ y 80) (- x 30) (+ y 60) (- x 30) (- y 40))))
+	(fact4 (create-polygon canvas (list (- x 40) (+ y 80) (- x 30) (+ y 60) (+ x 30) (+ y 60) (+ x 40) (+ y 80))))
+	(fact5 (create-polygon canvas (list (+ x 30) (+ y 60) (+ x 40) (+ y 80) (+ x 40) (- y 80) (+ x 30) (- y 40))))
+	(fact6 (create-line canvas (list (- x 30) (- y 40) (- x 40) (- y 80))))
+	(fact7 (create-line canvas (list (+ x 30) (+ y 60) (+ x 40) (+ y 80))))
+	(fact8 (create-line canvas (list (- x 30) (+ y 60) (- x 40) (+ y 80))))
+	(fact9 (create-line canvas (list (+ x 30) (- y 40) (+ x 40) (- y 80))))
+	(text1 (create-text canvas (- x 10) (- y 10) "Mai"))
+	(text2 (create-text canvas (- x 12) (+ y 5) "Linh"))
+	)
+    (itemconfigure canvas fact0 :fill :white)
+    (itemconfigure canvas fact2 :fill :green)
+    (itemconfigure canvas fact3 :fill :green)
+    (itemconfigure canvas fact4 :fill :green)
+    (itemconfigure canvas fact5 :fill :green)
+    (list (list fact0 fact1 fact2 fact3 fact4 fact5 fact6 fact7 fact8 fact9 text1 text2) x y 1 40 80)
+    ))
+ 
 ;;; Modifier la position d'une voiture ennemi type 01
 ;;; @param voiture - objet voiture 
 ;;; @param canvas - le canvas qui contient objet
@@ -96,19 +128,49 @@
   (setf (nth 2 voiture) y)
   (set-coords canvas (nth 0 (car voiture)) (list (- x 30) (- y 40) (+ x 30) (+ y 60)))
   (set-coords canvas (nth 1 (car voiture)) (list (- x 40) (- y 80) (+ x 40) (+ y 80)))
-  (set-coords canvas (nth 2 (car voiture)) (list (- x 30) (- y 40) (- x 40) (- y 80)))
-  (set-coords canvas (nth 3 (car voiture)) (list (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
-  (set-coords canvas (nth 4 (car voiture)) (list (- x 30) (+ y 60) (- x 40) (+ y 80)))
-  (set-coords canvas (nth 5 (car voiture)) (list (+ x 30) (- y 40) (+ x 40) (- y 80))))
+  (set-coords canvas (nth 2 (car voiture)) (list (- x 40) (- y 80) (+ x 40) (- y 80) (+ x 30) (- y 40) (- x 30) (- y 40)))
+  (set-coords canvas (nth 3 (car voiture)) (list (- x 40) (- y 80) (- x 40) (+ y 80) (- x 30) (+ y 60) (- x 30) (- y 40)))
+  (set-coords canvas (nth 4 (car voiture)) (list (- x 40) (+ y 80) (- x 30) (+ y 60) (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
+  (set-coords canvas (nth 5 (car voiture)) (list (+ x 30) (+ y 60) (+ x 40) (+ y 80) (+ x 40) (- y 80) (+ x 30) (- y 40)))
+  (set-coords canvas (nth 6 (car voiture)) (list (- x 30) (- y 40) (- x 40) (- y 80)))
+  (set-coords canvas (nth 7 (car voiture)) (list (+ x 30) (+ y 60) (+ x 40) (+ y 80)))
+  (set-coords canvas (nth 8 (car voiture)) (list (- x 30) (+ y 60) (- x 40) (+ y 80)))
+  (set-coords canvas (nth 9 (car voiture)) (list (+ x 30) (- y 40) (+ x 40) (- y 80)))
+  (set-coords canvas (nth 10 (car voiture)) (list (- x 10) (- y 10)))
+  (set-coords canvas (nth 11 (car voiture)) (list (- x 12) (+ y 5))))
+
+;;; Creer voiture ennemi de type 02 
+;;; Longueur voiture : 200
+;;; Largeur voiture : 100
+;;; @param canvas - le canvas qui contient objet
+;;; @param (x,y) - coordonnees d'initiales
+(defun create-voiture-ennemi-type-02 (canvas x y)
+  (let ((fact0 (create-rectangle canvas (- x 35) (+ y 70) (+ x 35) (+ y 100)))
+	(fact1 (create-rectangle canvas (- x 50) (- y 100) (+ x 50) (+ y 70))))
+    (itemconfigure canvas fact0 :fill :blue)
+    (itemconfigure canvas fact1 :fill :orange)
+    (list (list fact0 fact1) x y 2 50 100))
+  )
+
+;;; Modifier la position d'une voiture ennemi type 02
+;;; @param voiture - objet voiture 
+;;; @param canvas - le canvas qui contient objet
+;;; @param (x,y) coordonnees modifiees
+(defun set-pos-voiture-ennemi-type-02 (voiture canvas x y)
+  (setf (nth 1 voiture) x)
+  (setf (nth 2 voiture) y)
+  (set-coords canvas (nth 0 (car voiture)) (list (- x 35) (+ y 70) (+ x 35) (+ y 100)))
+  (set-coords canvas (nth 1 (car voiture)) (list (- x 50) (- y 100) (+ x 50) (+ y 70))))
 
 ;;; Random type des voiture
 (defun random-type ()
-  (1+ (random 3)))
+  (1+ (random 2)))
 
 ;;; Random le pourcentage pour creer une voiture ennemi
 (defun random-exist ()
   (random 100))
 
+;;; Random quelle line qu'on creer une voiture ennemi
 (defun random-line ()
   "Choose a random lane in which show the obstacles"
   (let ((rand (random 4)))
@@ -130,8 +192,8 @@
         ,t2))))
 
 ;;; Pour supprimer les voitures ennemis qu'on a passe
-(defun delete-out-of-screen-voiture-ennemi-type-01 (canvas l)
-  "Delete an obstacle from the screen"
+(defun delete-out-of-screen-voiture-ennemi (canvas l)
+  "Delete an obstacle out of the screen"
   (if (endp l)
       '()
       (dotimes (k (length l))
@@ -161,7 +223,13 @@
 	((= level 2) 10)
 	((= level 3) 20)
 	(t 20)))
-  
+
+(defun level-title (level)
+  (cond ((= level 1) "--- Level 01 (Easy) - Hong Kong ---")
+	((= level 2) "--- Level 02 (Normal) - Thailand ---")
+	((= level 3) "--- Level 03 (Very Hard) - Vietnam (The Deadth Race) ---")
+	(t "---")))
+
 (defun run-loop (c level run race rue my-voiture ennemi)
   ;;; run rue
   (if (= run 100)
@@ -170,91 +238,122 @@
   (set-trace-rue c run rue)
   ;;; run race
   (setq race (1+ race))
-  ;;; random ennemi
-  (if (= (mod race 20) 0)
-      (push (create-voiture-ennemi-type-01 c (random-line) -60) ennemi))
-  ;;; run ennemi
-  (mapcar #'(lambda (x) (set-pos-voiture-ennemi-type-01 x c (nth 1 x) (+ 5 (level-speed level) (nth 2 x)))) ennemi)
-  (delete-out-of-screen-voiture-ennemi-type-01 c ennemi)
-  ;;; calcule incident
+  ;;; random obstacles
+  (if (= (mod race (- 80 (* 20 level))) 0)
+      (if (= (random-type) 1)
+	  (push (create-voiture-ennemi-type-01 c (random-line) -60) ennemi)
+	  (push (create-voiture-ennemi-type-02 c (random-line) -100) ennemi)))
+  ;;; run obstacles
+  (mapcar #'(lambda (x) (if (= (nth 3 x) 1)
+			    (set-pos-voiture-ennemi-type-01 x c (nth 1 x) (+ 5 (level-speed level) (nth 2 x)))
+			    (set-pos-voiture-ennemi-type-02 x c (nth 1 x) (+ 5 (level-speed level) (nth 2 x)))))
+	  ennemi)
+  (delete-out-of-screen-voiture-ennemi c ennemi)
+  ;;; check if there is an accident
   (if (incident-voiture my-voiture ennemi)
       (print "Il y a une incident"))
   
-  ;;; sleep
+  ;;; sleep and loop
   (if (and (< race (* level 1000))
 	   (eq (incident-voiture my-voiture ennemi) nil))
       (let ()
-	(after 250 #'(lambda () (run-loop c level run race rue my-voiture ennemi))))
-      (let ()
-	(setq level (1+ level))
+	(after 25 #'(lambda () (run-loop c level run race rue my-voiture ennemi))))
+      (let ((check (incident-voiture my-voiture ennemi)))
 	(setq race 0)
 	(dotimes (x (length ennemi))
 	  (mapcar #'(lambda (x) (itemdelete c x)) (nth 0 (nth x ennemi))))
 	(dotimes (x (length ennemi))
 	  (pop ennemi))
 	(set-pos-my-voiture my-voiture c 400 600)
+	(let ((win-text "Congratulation, You Win the RACEEE !!")
+	      (lose-text "Sorry, You LOSE !!"))
+	  (if (eq check t)
+	      (create-text c (- 400 (* 7 (/ (length lose-text) 2))) 300 lose-text)
+	      (create-text c (- 400 (* 7 (/ (length win-text) 2))) 300 win-text))
+	  )
 	)
-      )
+      )	  
 )
 
-(defparameter pause 0)
+    
+(defun level-text (level)
+  (cond ((= level 1) "Easy")
+	((= level 2) "Normal")
+	((= level 3) "Very Hard")
+	(t "")))
 
 (defun main ()
   (setf *debug-tk* nil)
   (with-ltk ()
     (let* ((f (make-instance 'frame
-			     :width 900
+			     :width 800
 			     :height 800
 			     :master nil))
 	   (c (make-instance 'canvas
 			     :master f
 			     :width 800
-			     :height 700))
+			     :height 650))
+	   (header (make-instance 'canvas
+				  :master f
+				  :width 800
+				  :height 40))
+	   (footer (make-instance 'canvas
+				  :master f
+				  :width 800
+				  :height 30))
+	   (title (create-text header 10 10 "WELCOME TO FORMULAR 1 - Press Start to Play"))	  
 	   (level 1)
+	   (infos (create-text footer (- 400 (* 8 (/ (length (level-text level)) 2))) 10 (level-text level)))
 	   (run 0)
 	   (race 0)
-	   ;(pause 0)
 	   (rue (create-trace-rue c))
-	   (my-voiture (create-my-voiture c 400 600))
+	   (my-voiture (create-my-voiture c 380 600))
 	   (ennemi '())
 	   (button-01 (make-instance 'button
-				  :master f
-				  :text "Start"))
+				     :master f
+				     :text "Start"))	   
 	   (button-02 (make-instance 'button
-				  :master f
-				  :text "Pause")))
+				     :master f
+				     :text "Change Level")))
       ;;; initaliser
-      (pack c) (pack f) (pack button-01) ;(pack button-02)
+      (pack header) 
+      (pack c)
+      (pack f)
+      (pack button-01)
+      (pack button-02 :side :top)
+      (pack footer)
       (create-rue c)
 
-      ;(itemdelete c (create-line c (list 0 0 100 100)))
-      
       (bind button-01
 	    "<ButtonPress-1>"
-	    (lambda (evt) (declare (ignore evt))
-		    ;(setf pause 0)
+	    (lambda (evt) (declare (ignore evt))		    
+		    (itemconfigure header title :text (level-title level))
+		    (clear c)
+		    (create-rue c)
+		    (setf my-voiture (create-my-voiture c 380 600))
+		    (setf rue (create-trace-rue c))
 		    (run-loop c level run race rue my-voiture ennemi))) 
       
       (bind button-01
-	    "<KeyPress-q>"
+	    "<KeyPress-Left>"
 	    (lambda (evt) (declare (ignore evt))
-		    ;(if (= 0 pause)
-			(set-pos-my-voiture my-voiture c (- (nth 1 my-voiture) 40) (nth 2 my-voiture))))
-	    ;)
+		    (if (> (nth 1 my-voiture) 100)
+			(set-pos-my-voiture my-voiture c (- (nth 1 my-voiture) 40) (nth 2 my-voiture)))))
 
       (bind button-01
-	    "<KeyPress-p>"
+	    "<KeyPress-Right>"
 	    (lambda (evt) (declare (ignore evt))
-		    ;(if (= 0 pause)
-			(set-pos-my-voiture my-voiture c (+ (nth 1 my-voiture) 40) (nth 2 my-voiture))))
-            ;)
+		    (if (< (nth 1 my-voiture) 700) 
+			(set-pos-my-voiture my-voiture c (+ (nth 1 my-voiture) 40) (nth 2 my-voiture)))))
 
       (bind button-02
 	    "<ButtonPress-1>"
 	    (lambda (evt) (declare (ignore evt))
-		    ;(setf pause 1))
-	    ))
-
-
+		    (setq level (1+ level))
+		    (if (= level 4)
+			(setq level 1))		    
+		    (itemconfigure footer infos :text (level-text level))))
+      
+      
       )))	 
 	    
