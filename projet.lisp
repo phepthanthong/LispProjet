@@ -337,7 +337,7 @@
       (bind button-01
 	    "<KeyPress-Left>"
 	    (lambda (evt) (declare (ignore evt))
-		    (if (> (nth 1 my-voiture) 100)
+		    (if (> (nth 1 my-voiture) 120)
 			(set-pos-my-voiture my-voiture c (- (nth 1 my-voiture) 40) (nth 2 my-voiture)))))
 
       (bind button-01
