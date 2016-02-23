@@ -166,10 +166,6 @@
 (defun random-type ()
   (1+ (random 2)))
 
-;;; Random le pourcentage pour creer une voiture ennemi
-(defun random-exist ()
-  (random 100))
-
 ;;; Random quelle line qu'on creer une voiture ennemi
 (defun random-line ()
   "Choose a random lane in which show the obstacles"
@@ -198,7 +194,7 @@
       '()
       (dotimes (k (length l))
 	(if (> (nth 2 (nth k l)) 1000)
-	    (let ()
+	    (progn
 	      (mapcar #'(lambda (x) (itemdelete canvas x)) (nth 0 (nth k l)))
 	      (popnth k l))))))	      
 
@@ -206,7 +202,7 @@
 (defun incident-voiture (my-voiture ennemi)
   "Check if there is an accident"
   (let ((incident nil)
-	(result nil))
+	(result nil))    
     (dotimes (x (length ennemi))
       (setf incident (cond ((and (<= (abs (- (nth 1 my-voiture) (nth 1 (nth x ennemi)))) 
 				     (+ (nth 4 my-voiture) (nth 4 (nth x ennemi))))
@@ -217,7 +213,7 @@
       (if (eq incident t)
 	  (setf result t)))
     result))
-    
+
 (defun level-speed (level)
   (cond ((= level 1) 5)
 	((= level 2) 10)
@@ -256,15 +252,14 @@
   ;;; sleep and loop
   (if (and (< race (* level 1000))
 	   (eq (incident-voiture my-voiture ennemi) nil))
-      (let ()
-	(after 25 #'(lambda () (run-loop c level run race rue my-voiture ennemi))))
+      (after 25 #'(lambda () (run-loop c level run race rue my-voiture ennemi)))
       (let ((check (incident-voiture my-voiture ennemi)))
 	(setq race 0)
 	(dotimes (x (length ennemi))
 	  (mapcar #'(lambda (x) (itemdelete c x)) (nth 0 (nth x ennemi))))
 	(dotimes (x (length ennemi))
 	  (pop ennemi))
-	(set-pos-my-voiture my-voiture c 400 600)
+	(set-pos-my-voiture my-voiture c 400 500)
 	(let ((win-text "Congratulation, You Win the RACEEE !!")
 	      (lose-text "Sorry, You LOSE !!"))
 	  (if (eq check t)
@@ -287,12 +282,12 @@
   (with-ltk ()
     (let* ((f (make-instance 'frame
 			     :width 800
-			     :height 800
+			     :height 700
 			     :master nil))
 	   (c (make-instance 'canvas
 			     :master f
 			     :width 800
-			     :height 650))
+			     :height 600))
 	   (header (make-instance 'canvas
 				  :master f
 				  :width 800
@@ -307,7 +302,7 @@
 	   (run 0)
 	   (race 0)
 	   (rue (create-trace-rue c))
-	   (my-voiture (create-my-voiture c 380 600))
+	   (my-voiture (create-my-voiture c 380 500))
 	   (ennemi '())
 	   (button-01 (make-instance 'button
 				     :master f
@@ -330,7 +325,7 @@
 		    (itemconfigure header title :text (level-title level))
 		    (clear c)
 		    (create-rue c)
-		    (setf my-voiture (create-my-voiture c 380 600))
+		    (setf my-voiture (create-my-voiture c 380 500))
 		    (setf rue (create-trace-rue c))
 		    (run-loop c level run race rue my-voiture ennemi))) 
       
